@@ -2,21 +2,14 @@ import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { blue } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SettingsPicker from './SettingPicker';
-import {Button, ButtonGroup } from '@material-ui/core';
+import {Button} from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -70,15 +63,16 @@ export default function Counter() {
             <CardContent>
                 {error ? <Typography variant="h6" color="textSecondary" component="h1" align="center">
                     <h1>Aplly settings !</h1>
-                </Typography> :<Typography variant="h6" color="textSecondary" component="h1" align="center">
+                </Typography> :<Typography variant="h6" color={counter === value[1] ? 'secondary' : 'primary'} component="h1" align="center">
                     <h1>{counter}</h1>
                 </Typography>}
                 <Typography variant="body2" color="textSecondary" component="p">
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
-                <Button variant="outlined" onClick={incrementFunction} disabled={error}>INC</Button>
-                <Button variant="outlined" onClick={resetCounter} disabled={!(counter > value[0]) && error}>RESET</Button>
+                <Button variant="outlined" onClick={incrementFunction} disabled={counter === value[1] || error}>INC</Button>
+                <Button variant="outlined" onClick={resetCounter} disabled={counter === value[0] || error}>RESET</Button>
+                {/*!(counter > value[0]) && error*/}
                 <IconButton
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
@@ -93,7 +87,7 @@ export default function Counter() {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
                     <SettingsPicker value={value} handleChange={handleChange}/>
-                    <Button variant="outlined" onClick={resetCounter}>Apply range</Button>
+                    <Button variant="outlined" onClick={resetCounter} color={!error ? 'primary' : 'secondary'}>Apply range</Button>
                 </CardContent>
             </Collapse>
         </Card>
