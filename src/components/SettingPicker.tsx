@@ -12,24 +12,23 @@ const useStyles = makeStyles({
 function valuetext(value: number) {
     return `${value}°C`;
 }
-
-export default function SettingsPicker() {
+export type SettingsPickerPropsType = {
+    value:number[]
+    handleChange:(event: any, newValue: number | number[])=>void
+}
+export default function SettingsPicker(props:SettingsPickerPropsType) {
     const classes = useStyles();
-    const [value, setValue] = React.useState<number[]>([20, 37]);
 
-    const handleChange = (event: any, newValue: number | number[]) => {
-        setValue(newValue as number[]);
-    };
 
     return (
         <div className={classes.root}>
             <Typography id="range-slider" gutterBottom>
-                Counter range
+                Counter range from {props.value[0]} to {props.value[1]}
             </Typography>
             <Slider
-                value={value}
-                onChange={handleChange}
-                valueLabelDisplay="auto"
+                value={props.value}
+                onChange={props.handleChange}
+                valueLabelDisplay="off"
                 aria-labelledby="range-slider"
                 getAriaValueText={valuetext}
             />

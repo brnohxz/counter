@@ -16,6 +16,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SettingsPicker from './SettingPicker';
+import {Button, ButtonGroup } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,23 +41,44 @@ export default function Counter() {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const [counter, setCounter] = React.useState(0)
+    const [value, setValue] = React.useState<number[]>([0, 100]);
+    const [error,setError] = React.useState(false)
+    const handleChange = (event: any, newValue: number | number[]) => {
+        setValue(newValue as number[]);
+        console.log(value)
+        setError(true)
+    };
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+    const applyNewRange=()=>{
+        setError(true)
+    }
+    const incrementFunction = ()=>{
+        if(value[1] < counter + 1){
+            setError(true)
+        }else{
+            setCounter(counter + 1)
+        }
+    }
+    const resetCounter = () => {
+        setCounter(value[0])
+        setError(false)
+    }
     return (
         <Card className={classes.root}>
             <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
+                {error ? <Typography variant="h6" color="textSecondary" component="h1" align="center">
+                    <h1>Aplly settings !</h1>
+                </Typography> :<Typography variant="h6" color="textSecondary" component="h1" align="center">
                     <h1>{counter}</h1>
+                </Typography>}
+                <Typography variant="body2" color="textSecondary" component="p">
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="share">
-                    <ShareIcon />
-                </IconButton>
+                <Button variant="outlined" onClick={incrementFunction} disabled={error}>INC</Button>
+                <Button variant="outlined" onClick={resetCounter} disabled={!(counter > value[0]) && error}>RESET</Button>
                 <IconButton
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
@@ -70,7 +92,8 @@ export default function Counter() {
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <SettingsPicker/>
+                    <SettingsPicker value={value} handleChange={handleChange}/>
+                    <Button variant="outlined" onClick={resetCounter}>Apply range</Button>
                 </CardContent>
             </Collapse>
         </Card>
